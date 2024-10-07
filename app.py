@@ -1,22 +1,21 @@
-from flask import Flask # type: ignore
-from PyMongo import PyMongo # type: ignore
+from flask import Flask, render_template
+from pymongo import MongoClient
 
 app = Flask(__name__)
 
-# MongoDB connection string
-app.config["MONGO_URI"] = "mongodb+srv://root:V6rOOpMRY1YlGEM5@cluster0.mongodb.net/shop_db?retryWrites=true&w=majority"
-
-# Initialize PyMongo
-mongo = PyMongo(app)
+# Replace this with your actual MongoDB Atlas URI
+client = MongoClient("mongodb+srv://root:V6rOOpMRY1YlGEM5@cluster0.6x6rl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+db = client['shop_db']
+products_collection = db['products']
 
 @app.route('/')
 def home():
-    return 'Flask is working!'
+    return render_template('home.html')
 
 @app.route('/products')
 def products():
-    products = mongo.db.products.find()
-    return f"Number of products: {products.count()}"
+    products = products_collection.find()
+    return render_template('products.html', products=products)
 
 if __name__ == '__main__':
     app.run(debug=True)
