@@ -1,5 +1,5 @@
-from flask import Flask, render_template
-from pymongo import MongoClient
+from flask import Flask, render_template # type: ignore
+from pymongo import MongoClient # type: ignore
 
 app = Flask(__name__)
 
