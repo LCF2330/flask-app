@@ -1,23 +1,22 @@
-from flask import Flask, render_template # type: ignore
-from pymongo import MongoClient # type: ignore
+from flask import Flask
+from flask_pymongo import PyMongo
 
 app = Flask(__name__)
 
-# Replace <username>, <password>, and cluster URL with your credentials
-client = MongoClient("mongodb+srv://root:V6rOOpMRY1YlGEM5@cluster0.6x6rl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+# MongoDB connection string
+app.config["MONGO_URI"] = "mongodb+srv://<username>:<password>@cluster0.mongodb.net/shop_db?retryWrites=true&w=majority"
 
-# Connect to your specific database
-db = client.shop_db
-products_collection = db.products
+# Initialize PyMongo
+mongo = PyMongo(app)
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return 'Flask is working!'
 
 @app.route('/products')
 def products():
-    products = products_collection.find()  # Fetch products from MongoDB
-    return render_template('products.html', products=products)
+    products = mongo.db.products.find()
+    return f"Number of products: {products.count()}"
 
 if __name__ == '__main__':
     app.run(debug=True)
