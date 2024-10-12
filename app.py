@@ -1,14 +1,11 @@
-from flask import Flask, render_template
-from pymongo import MongoClient
+from flask import Flask, render_template # type: ignore
+from pymongo import MongoClient # type: ignore
 
 app = Flask(__name__)
 
-# Replace <username>, <password>, and cluster URL with your credentials
 client = MongoClient("mongodb+srv://root:V6rOOpMRY1YlGEM5@cluster0.6x6rl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-
-# Connect to your specific database
-db = client.shop_db
-products_collection = db.products
+db = client['shop_db']
+products_collection = db['products']
 
 @app.route('/')
 def home():
@@ -16,7 +13,7 @@ def home():
 
 @app.route('/products')
 def products():
-    products = products_collection.find()  # Fetch products from MongoDB
+    products = products_collection.find()
     return render_template('products.html', products=products)
 
 if __name__ == '__main__':
