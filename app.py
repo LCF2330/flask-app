@@ -1,20 +1,24 @@
-from flask import Flask, render_template # type: ignore
-from pymongo import MongoClient # type: ignore
+from flask import Flask
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  
 
 app = Flask(__name__)
 
-client = MongoClient("mongodb+srv://root:V6rOOpMRY1YlGEM5@cluster0.6x6rl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-db = client['shop_db']
-products_collection = db['products']
+MONGODB_USERNAME = os.getenv('MONGODB_USERNAME')
+MONGODB_PASSWORD = os.getenv('MONGODB_PASSWORD')
+MONGODB_CLUSTER_URL = os.getenv('MONGODB_CLUSTER_URL')
+
+from pymongo import MongoClient
+connection_string = f"mongodb+srv://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@{MONGODB_CLUSTER_URL}/shop_db?retryWrites=true&w=majority"
+client = MongoClient(connection_string)
+db = client.shop_db
+products_collection = db.products
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return "Welcome to the E-Commerce Store!"
 
-@app.route('/products')
-def products():
-    products = products_collection.find()
-    return render_template('products.html', products=products)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
