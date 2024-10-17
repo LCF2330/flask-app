@@ -12,6 +12,8 @@ MONGODB_CLUSTER_URL = os.getenv('MONGODB_CLUSTER_URL')
 
 connection_string = f"mongodb+srv://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@{MONGODB_CLUSTER_URL}/shop_db?retryWrites=true&w=majority"
 
+print("Connection String:", connection_string)
+
 client = MongoClient(connection_string)
 db = client.shop_db
 products_collection = db.products
